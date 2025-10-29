@@ -14,9 +14,9 @@ class SplashActivity  : AppCompatActivity(){
             override fun run() {
                 try {
                     sleep(3000) // Tiempo en milisegundos
-                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    val intent = Intent(this@SplashActivity, PrimeraActivity::class.java)
                     startActivity(intent)
-                    finish()//mata el oncreate no espera ningun estado mas
+                    finish()
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
