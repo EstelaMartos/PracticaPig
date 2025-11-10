@@ -1,10 +1,12 @@
-package com.example.practicapig
+package com.example.practicapig.JuegoPig
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.practicapig.databinding.ActivityPrimeraBinding
 
@@ -23,13 +25,14 @@ class PrimeraActivity : AppCompatActivity() {
 
         //creacion del spinner
         val numJugadores = listOf("Selecciona jugadores","2","3","4")
-        val adapterJugadores = ArrayAdapter(this, android.R.layout.simple_spinner_item, numJugadores)
-        adapterJugadores.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapterJugadores = ArrayAdapter(this, R.layout.simple_spinner_item, numJugadores)
+        adapterJugadores.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.spinnerJugadores.adapter = adapterJugadores
         //hasta aqui creacion spinner
 
         binding.spinnerJugadores.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
                 //seleccionamos el numero de jugadores del spinner
                 if (position == 0) {
                     jugadoresSeleccionados = null
@@ -37,20 +40,18 @@ class PrimeraActivity : AppCompatActivity() {
                     jugadoresSeleccionados = numJugadores[position].toInt()
                 }
 
-                //--------leo el número que ponen en las rondas-----Aqui el text
+                //--------leo el número que ponen en las rondas-----
                 val textoNumeroRondas = binding.NumeroRondas.text.toString().trim()
                 if (textoNumeroRondas.isEmpty()) {
                     rondasSeleccionadas = null
                 } else {
-                    try {
-                        val numeroRondas = textoNumeroRondas.toInt()
-                        if (numeroRondas == 2 || numeroRondas == 4 || numeroRondas == 6) {
-                            rondasSeleccionadas = numeroRondas
-                        } else {
-                            rondasSeleccionadas = null
-                        }
-                    } catch (e: NumberFormatException) {
+                    val numeroRondas = textoNumeroRondas.toIntOrNull()
+                    //lanzo toast si ponen num rondas incorrecto
+                    if (numeroRondas == null || (numeroRondas != 2 && numeroRondas != 4 && numeroRondas != 6)) {
                         rondasSeleccionadas = null
+                        Toast.makeText(this@PrimeraActivity, "Número de rondas inválido. Usa 2, 4 o 6.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        rondasSeleccionadas = numeroRondas
                     }
                 }
                 //----hasta aqui el text---------
@@ -65,15 +66,22 @@ class PrimeraActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }else{
-                    android.widget.Toast.makeText(this@PrimeraActivity, "Por favor, selecciona jugadores y rondas", android
-                        .widget.Toast.LENGTH_SHORT).show()
                     if (binding.spinnerJugadores.selectedItemPosition != 0) {  //vuelvo a poner el spinner en la posicion 0 manualmente para forzar una nueva seleccion
-                        binding.spinnerJugadores.setSelection(0)
+                        binding.spinnerJugadores.setSelection(0)//si algo ha fallado vuelvo el spinner a 0 para evitar problemas de seleccion
                     }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) { }
+
+
         }
+
+
     }
+
+
 }
+
+
+

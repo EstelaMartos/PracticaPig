@@ -3,6 +3,7 @@ package com.example.practicapig
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.practicapig.JuegoPig.PrimeraActivity
 
 class SplashActivity  : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
