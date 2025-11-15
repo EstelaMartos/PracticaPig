@@ -9,13 +9,11 @@ import com.example.practicapig.databinding.ActivityUltimaBinding
 class UltimaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUltimaBinding
-    private lateinit var nombresOrden: ArrayList<String>
 
     // arrays recibidos por Intent: nombres y puntos
 
-    private lateinit var puntosOrden: IntArray
-    private var jugadoresSeleccionados: Int = 0
-    private var mensajeFinal: String = ""
+    private lateinit var juego: Juego
+    private lateinit var listaJugadores: ArrayList<Jugador>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,59 +24,73 @@ class UltimaActivity : AppCompatActivity() {
 
         //-----------recojo los datos del intent
 
-        nombresOrden = intent.getStringArrayListExtra("nombresOrden") ?: arrayListOf()
-        puntosOrden  = intent.getIntArrayExtra("puntosOrden") ?: IntArray(0)
-        mensajeFinal = intent.getStringExtra("mensajeFinal") ?: ""
+        juego = intent.getParcelableCompat<Juego>("juego")!!
+        listaJugadores =
+            intent.getParcelableArrayListCompat<Jugador>("jugadoresFinales") ?: arrayListOf()
 
-        // numero de jugadores = tamaño de los arrays
-        jugadoresSeleccionados = nombresOrden.size
+        // -------- Calculo el mensaje final
+        var maxPuntos = 0
+        for (jugador in listaJugadores) {
+            if (jugador.puntos > maxPuntos) {
+                maxPuntos = jugador.puntos
+            }
+        }
+
+        val ganadores = ArrayList<Jugador>()
+        for (jugador in listaJugadores) {
+            if (jugador.puntos == maxPuntos) {
+                ganadores.add(jugador)
+            }
+        }
+
+        val mensaje = if (ganadores.size == 1) {
+            "Ganador: ${ganadores[0].nombre} con $maxPuntos puntos"
+        } else {
+            val nombres = ganadores.joinToString(", ") { it.nombre }
+            "Empate entre: $nombres con $maxPuntos puntos"
+        }
 
 
         // controlo d enuevo la visibilidad
-        when (jugadoresSeleccionados) {
+        when (listaJugadores.size) {
             2 -> visibilidadJugadores(visible3 = false, visible4 = false)
-            3 -> visibilidadJugadores(visible3 = true,  visible4 = false)
-            4 -> visibilidadJugadores(visible3 = true,  visible4 = true)
+            3 -> visibilidadJugadores(visible3 = true, visible4 = false)
+            4 -> visibilidadJugadores(visible3 = true, visible4 = true)
         }
 
 
         // ----------pinto nombres y puntuaciones
 
         // jugador 1
-        binding.textJugador1.text = nombresOrden[0]
-        binding.textPuntuacionJ1.text = puntosOrden[0].toString()
+        binding.textJugador1.text = listaJugadores[0].toString()
+
 
         // jugador 2
-        binding.textJugador2.text = nombresOrden[1]
-        binding.textPuntuacionJ2.text = puntosOrden[1].toString()
+        binding.textJugador2.text = listaJugadores[1].toString()
+
 
         // jugador 3
-        if (jugadoresSeleccionados >= 3) {
-            binding.textJugador3.text = nombresOrden[2]
-            binding.textPuntuacionJ3.text = puntosOrden[2].toString()
-        }
+        binding.textJugador3.text = listaJugadores[2].toString()
+
+
 
         // jugador 4
-        if (jugadoresSeleccionados == 4) {
-            binding.textJugador4.text = nombresOrden[3]
-            binding.textPuntuacionJ4.text = puntosOrden[3].toString()
-        }
+        binding.textJugador4.text = listaJugadores[3].toString()
+
+
 
 
         // -------mensaje final
 
-        binding.textMensajeFinal.visibility = View.VISIBLE
-        binding.textMensajeFinal.text = mensajeFinal
+        binding.textMensajeFinal.text = mensaje
     }
 
 
     private fun visibilidadJugadores(visible3: Boolean, visible4: Boolean) {
 
-        binding.textJugador3.visibility     = if (visible3) View.VISIBLE else View.GONE
-        binding.textPuntuacionJ3.visibility = if (visible3) View.VISIBLE else View.GONE
+        binding.textJugador3.visibility = if (visible3) View.VISIBLE else View.GONE
 
+        binding.textJugador4.visibility = if (visible4) View.VISIBLE else View.GONE
 
-        binding.textJugador4.visibility     = if (visible4) View.VISIBLE else View.GONE
-        binding.textPuntuacionJ4.visibility = if (visible4) View.VISIBLE else View.GONE
     }
 }

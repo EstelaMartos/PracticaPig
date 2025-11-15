@@ -1,7 +1,9 @@
 package com.example.practicapig.JuegoPig
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +15,7 @@ class SegundaActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySegundaBinding
 
     // array que guarda el nombre elegido por cada jugador
-    private lateinit var arrayNombresSeleccionados: Array<String?>
+    private lateinit var arrayNombresSeleccionados: Array<Jugador?>
 
     // listas con los recicler y sus respectivos adapters
     private val recyclerViewsJugadores: MutableList<RecyclerView> = mutableListOf() //es la lista de los recicler views que se muestran
@@ -22,6 +24,22 @@ class SegundaActivity : AppCompatActivity() {
     // -------datos que llegan desde la primera activiti
     private var rondasSeleccionadas: Int = 0
     private var jugadoresSeleccionados: Int = 0
+    private lateinit var juego: Juego
+
+
+
+    //lista de los nombres como objetos
+    private val nombresDisponibles = listOf(
+        Jugador("Aitor Tilla",0), Jugador("Ana Conda",0),
+        Jugador("Armando Broncas",0), Jugador("Aurora Boreal",0),
+        Jugador("Bartolo Mesa",0),
+        Jugador("Carmen Mente",0), Jugador("Enrique Cido",0),
+        Jugador("Esteban Dido",0), Jugador("Elba Lazo",0),
+        Jugador("Fermin Tado",0),
+        Jugador("Lola Mento",0), Jugador("Luz Cuesta",0),
+        Jugador("Paco Tilla",0), Jugador("Pere Gil",0),
+        Jugador("Salvador Tumbado",0)
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +49,9 @@ class SegundaActivity : AppCompatActivity() {
 
         //--------recojo los datos del intent
 
-        rondasSeleccionadas = intent.getIntExtra("rondas", 0)
-        jugadoresSeleccionados = intent.getIntExtra("jugadores", 0)
+        juego = intent.getParcelableCompat<Juego>("juego")!!
+        rondasSeleccionadas = juego.numRondas
+        jugadoresSeleccionados = juego.numJugadores
 
         //-------hasta aqui los intent
 
@@ -89,7 +108,7 @@ class SegundaActivity : AppCompatActivity() {
 
     //   se ejecuta cuando un jugador pulsa un nombre en su lista
     // el adapter llama directamente a esta función
-    fun gestionarSeleccionDeNombre(nombreSeleccionado: String, jugadorQueClico: Int) {
+    fun gestionarSeleccionDeNombre(nombreSeleccionado: Jugador, jugadorQueClico: Int) {
 
         val nombreActual = arrayNombresSeleccionados[jugadorQueClico]
 
@@ -127,30 +146,20 @@ class SegundaActivity : AppCompatActivity() {
     //muestra solo los nombres disponibles
     //resalta en negrita el nombre que cada jugador ha elegido
     private fun actualizarListas() {
-        val nombresYaTomados = arrayNombresSeleccionados.filterNotNull() //son los nombres que ya estan cogidos por los demas jugadores
+        val nombresYaTomados: List<Jugador> = arrayNombresSeleccionados.filterNotNull()
 
         var indiceJugador = 0
-        while (indiceJugador < adaptersNombrePorJugador.size) { //recorro los adapters
-            val adapter = adaptersNombrePorJugador[indiceJugador] //obtenemos el adapter del jugador actual
-            val miSeleccion = arrayNombresSeleccionados[indiceJugador] //recupero el nombre que eligió ese jugador
+        while (indiceJugador < adaptersNombrePorJugador.size) {
+            val adapter = adaptersNombrePorJugador[indiceJugador]
+            val miSeleccion = arrayNombresSeleccionados[indiceJugador]
 
-            // creo una lista filtrada con:
-            // su nombre actual en negrita
-            // los nombres que no estén elegidos por otros
-            val listaFiltrada = ArrayList<String>() //lista que contiene los nombres sin los nombres selccionados por otros
-            for (nombre in NOMBRES) { //recorro la lista d elos nombres
-                var esMiSeleccion = false
-                if (miSeleccion != null) { //si mi seleccion no es null
-                    if (miSeleccion == nombre) { //si mi seleccion es un mobre
-                        esMiSeleccion = true //es true que es mi seleccion
-                    }
-                }
-
-                //si el nombre no esta tomado, se muestra, si esta tomado pero es el que he elegido, se muestra en negrita,
-                // si ya esta seleccionado por otro, no s epuede seleccionar
+            // creo una lista filtrada con su nombre actual (si lo tiene) + nombres libres
+            val listaFiltrada = ArrayList<Jugador>()
+            for (nombre in nombresDisponibles) {
+                val esMiSeleccion = (miSeleccion != null && miSeleccion == nombre)
                 val estaTomado = nombresYaTomados.contains(nombre)
-                if (esMiSeleccion || !estaTomado) { //si mi seleccion no esta elegida por otro
-                    listaFiltrada.add(nombre)//a la lista filtrada, añado mi eleccion
+                if (esMiSeleccion || !estaTomado) {
+                    listaFiltrada.add(nombre)
                 }
             }
 
@@ -163,21 +172,23 @@ class SegundaActivity : AppCompatActivity() {
     //una vez elegidos todos los nombres, paso a la siguiente activity
 
     private fun pasarASiguienteActivity() {
-        // creo un array de Strings con el tamaño del numero de los jugadores seleccionados
-        val nombresFinales = Array(jugadoresSeleccionados) { "" }
-
-        // relleno el array
-        for (indiceJugador in 0 until jugadoresSeleccionados) { //
-            nombresFinales[indiceJugador] = arrayNombresSeleccionados[indiceJugador] ?: ""
-        }
-
         //---------------------hago los intent
+        //creo un alista de jugadores(objetos)
+        val jugadoresFinales = ArrayList<Jugador>()
+        for (indiceJugador in 0 until jugadoresSeleccionados) {
+            val jugadorSeleccionado = arrayNombresSeleccionados[indiceJugador]
+            jugadoresFinales.add(
+                Jugador(jugadorSeleccionado?.nombre ?: "Sin nombre", 0)
+            )
+        }
         val intentJuego = Intent(this, MainActivity::class.java)
-        intentJuego.putExtra("jugadores", jugadoresSeleccionados)
-        intentJuego.putExtra("rondas", rondasSeleccionadas)
-        intentJuego.putExtra("nombresSeleccionados", nombresFinales)
+        //paso el objeto juego
+        intentJuego.putExtra("juego", juego)
+        //paso la lista de jugadores
+        intentJuego.putParcelableArrayListExtra("jugadoresLista", jugadoresFinales)
+        //paso a la siguiente activity
         startActivity(intentJuego)
-        finish() // cierro esta activity
+        finish()
     }
 
 
@@ -189,6 +200,10 @@ class SegundaActivity : AppCompatActivity() {
         binding.textNombre4.visibility = if (visibleJ4) View.VISIBLE else View.GONE //visibilidad texto
         binding.nombreJ4.visibility = if (visibleJ4) View.VISIBLE else View.GONE //visibilidad recicler
     }
+
+    inline fun <reified T : Parcelable> Intent.getParcelableCompat(key: String): T? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            getParcelableExtra(key, T::class.java)
+        else
+            @Suppress("DEPRECATION") getParcelableExtra(key)
 }
-
-

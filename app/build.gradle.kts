@@ -1,14 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+
 }
 
 android {
     namespace = "com.example.practicapig"
-    compileSdk = 36
+    compileSdk = 34
 
     buildFeatures {
-        viewBinding = true // <--- ¡Añade esta línea!
+        viewBinding = true
     }
 
     defaultConfig {
@@ -21,9 +24,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures {
-        viewBinding = true // <--- ¡Añade esta línea!
-    }
+
 
     buildTypes {
         release {
@@ -54,4 +55,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    val room_version = "2.6.0"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version") // opcional, pero recomendado
+    ksp("androidx.room:room-compiler:$room_version")
+
 }

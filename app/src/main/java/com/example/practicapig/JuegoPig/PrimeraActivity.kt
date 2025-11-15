@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.practicapig.databinding.ActivityPrimeraBinding
+import com.example.practicapig.JuegoPig.Juego
 
 class PrimeraActivity : AppCompatActivity() {
 
@@ -58,11 +59,12 @@ class PrimeraActivity : AppCompatActivity() {
 
                 // si ambos campos son distintos de null, paso a la siguiente activity
                 if (rondasSeleccionadas != null && jugadoresSeleccionados != null) {
-                    val rondas = rondasSeleccionadas
-                    val jugadores = jugadoresSeleccionados
+                    val juego = Juego(
+                        numJugadores = jugadoresSeleccionados!!,
+                        numRondas = rondasSeleccionadas!!
+                    )
                     val intent = Intent(this@PrimeraActivity, SegundaActivity::class.java)
-                    intent.putExtra("rondas", rondas)
-                    intent.putExtra("jugadores", jugadores)
+                    intent.putExtra("juego", juego)
                     startActivity(intent)
                     finish()
                 }else{

@@ -10,8 +10,8 @@
 
     <TextView
         android:id="@+id/textRondaActual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200.dp"
+        android:layout_height="35.dp"
         android:text="Número de ronda:"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -34,7 +34,7 @@
         app:layout_constraintHorizontal_bias="0.735"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.883" />
+        app:layout_constraintVertical_bias="0.885" />
 
     <TextView
         android:id="@+id/textIdTurnoJugador"
@@ -66,7 +66,7 @@
 
     <TextView
         android:id="@+id/textJugador4"
-        android:layout_width="125dp"
+        android:layout_width="200dp"
         android:layout_height="25dp"
         android:text="Jugador 4"
         android:visibility="visible"
@@ -79,7 +79,7 @@
 
     <TextView
         android:id="@+id/textJugador3"
-        android:layout_width="125dp"
+        android:layout_width="200dp"
         android:layout_height="25dp"
         android:text="Jugador 3"
         android:visibility="visible"
@@ -89,56 +89,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.18" />
-
-    <TextView
-        android:id="@+id/textPuntuacionJ3"
-        android:layout_width="50dp"
-        android:layout_height="24dp"
-        android:text="0"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.181" />
-
-    <TextView
-        android:id="@+id/textPuntuacionJ4"
-        android:layout_width="50dp"
-        android:layout_height="24dp"
-        android:text="0"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.223" />
-
-    <TextView
-        android:id="@+id/textPuntuacionJ2"
-        android:layout_width="50dp"
-        android:layout_height="24dp"
-        android:text="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.141" />
-
-    <TextView
-        android:id="@+id/textPuntuacionJ1"
-        android:layout_width="50dp"
-        android:layout_height="24dp"
-        android:text="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.104" />
 
     <TextView
         android:id="@+id/textMarcador"
@@ -155,7 +105,7 @@
 
     <TextView
         android:id="@+id/textJugador2"
-        android:layout_width="125dp"
+        android:layout_width="200dp"
         android:layout_height="25dp"
         android:text="Jugador 2"
         android:visibility="visible"
@@ -168,7 +118,7 @@
 
     <TextView
         android:id="@+id/textJugador1"
-        android:layout_width="125dp"
+        android:layout_width="200dp"
         android:layout_height="25dp"
         android:text="Jugador 1"
         android:visibility="visible"

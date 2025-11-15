@@ -12,10 +12,10 @@ class NombreAdapter(private val activity: SegundaActivity, // llamo a la Activit
 ) : RecyclerView.Adapter<NombreAdapter.NombreViewHolder>() {
 
     // hago la lista de nombres que se muestran al inicio
-    private var nombresVisibles: List<String> = emptyList()
+    private var nombresVisibles: List<Jugador> = emptyList()
 
     // nombre seleccionado por el jugador, hago esto para marcarlos en negrita despues
-    private var nombreSeleccionadoActual: String? = null
+    private var nombreSeleccionadoActual: Jugador? = null
 
 
     // el ViewHolder es cada contenedor de un nombre
@@ -23,11 +23,11 @@ class NombreAdapter(private val activity: SegundaActivity, // llamo a la Activit
         RecyclerView.ViewHolder(binding.root) {
 
         // pinta los nombres en la vista
-        fun bind(nombre: String) {
-            binding.textViewNombre.text = nombre
+        fun bind(jugador: Jugador) {
+            binding.textViewNombre.text = jugador.nombre
 
             // marco en negrita el nomre seleccionado
-            if (nombreSeleccionadoActual != null && nombreSeleccionadoActual == nombre) {
+            if (nombreSeleccionadoActual != null && nombreSeleccionadoActual == jugador) {
                 binding.textViewNombre.setTypeface(null, Typeface.BOLD)
             } else {
                 binding.textViewNombre.setTypeface(null, Typeface.NORMAL)
@@ -36,7 +36,7 @@ class NombreAdapter(private val activity: SegundaActivity, // llamo a la Activit
             // controlo lo que sucede cuando se hace click en un nombre
             binding.root.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    activity.gestionarSeleccionDeNombre(nombre, indiceJugador)
+                    activity.gestionarSeleccionDeNombre(jugador, indiceJugador)
                 }
             })
         }
@@ -53,8 +53,8 @@ class NombreAdapter(private val activity: SegundaActivity, // llamo a la Activit
 
     // -------------------asigno los datos a la vista
     override fun onBindViewHolder(holder: NombreViewHolder, position: Int) {
-        val nombre = nombresVisibles[position]
-        holder.bind(nombre)
+        val jugador = nombresVisibles[position]
+        holder.bind(jugador)
     }
 
 
@@ -63,7 +63,7 @@ class NombreAdapter(private val activity: SegundaActivity, // llamo a la Activit
 
 
     //------------- actualizo la lista que se muestra y la selección
-    fun actualizarDatos(nuevaLista: List<String>, seleccionActual: String?) {
+    fun actualizarDatos(nuevaLista: List<Jugador>, seleccionActual: Jugador?) {
         nombresVisibles = nuevaLista
         nombreSeleccionadoActual = seleccionActual
         notifyDataSetChanged()

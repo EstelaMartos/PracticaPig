@@ -21,6 +21,16 @@
         </activity>
 
         <activity
+            android:name=".Hub.RegistroActivity"
+            android:exported="false"
+            />
+
+        <activity
+            android:name=".Hub.LoginActivity"
+            android:exported="false"
+            />
+
+        <activity
             android:name=".JuegoPig.PrimeraActivity"
             android:exported="false"
              />

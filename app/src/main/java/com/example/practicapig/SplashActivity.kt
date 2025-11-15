@@ -3,6 +3,7 @@ package com.example.practicapig
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.practicapig.Hub.RegistroActivity
 import com.example.practicapig.JuegoPig.PrimeraActivity
 
 class SplashActivity  : AppCompatActivity(){
@@ -15,7 +16,7 @@ class SplashActivity  : AppCompatActivity(){
             override fun run() {
                 try {
                     sleep(3000) // Tiempo en milisegundos
-                    val intent = Intent(this@SplashActivity, PrimeraActivity::class.java)
+                    val intent = Intent(this@SplashActivity, RegistroActivity::class.java)
                     startActivity(intent)
                     finish()
                 } catch (e: InterruptedException) {
