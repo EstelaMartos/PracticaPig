@@ -177,9 +177,7 @@ class SegundaActivity : AppCompatActivity() {
         val jugadoresFinales = ArrayList<Jugador>()
         for (indiceJugador in 0 until jugadoresSeleccionados) {
             val jugadorSeleccionado = arrayNombresSeleccionados[indiceJugador]
-            jugadoresFinales.add(
-                Jugador(jugadorSeleccionado?.nombre ?: "Sin nombre", 0)
-            )
+            jugadoresFinales.add(Jugador(jugadorSeleccionado?.nombre ?: "Sin nombre", 0))
         }
         val intentJuego = Intent(this, MainActivity::class.java)
         //paso el objeto juego

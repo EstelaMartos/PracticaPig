@@ -29,6 +29,14 @@
             android:name=".Hub.LoginActivity"
             android:exported="false"
             />
+        <activity
+            android:name=".Hub.MenuActivity"
+            android:exported="false"
+            />
+        <activity
+            android:name=".Hub.CContraseniaActivity"
+            android:exported="false"
+            />
 
         <activity
             android:name=".JuegoPig.PrimeraActivity"

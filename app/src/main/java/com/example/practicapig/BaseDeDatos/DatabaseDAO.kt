@@ -1,7 +1,7 @@
 package com.example.practicapig.BaseDeDatos
 
 import androidx.room.*
-import com.example.practicapig.Hub.Usuario
+import com.example.practicapig.BaseDeDatos.Usuario
 
 @Dao
 interface DatabaseDAO {
@@ -13,6 +13,10 @@ interface DatabaseDAO {
 
     @Query("SELECT * FROM usuarios WHERE nombre LIKE :nombreBuscar  LIMIT 1")
     fun buscarPorNombre (nombreBuscar: String): Usuario
+
+    @Query("UPDATE usuarios SET contraseña = :contraseña WHERE nombre = :nombre")
+    fun actualizarContrasenia(nombre: String, contraseña: String)
+
 
     @Insert
     fun insertarUsuario(usuario: Usuario)

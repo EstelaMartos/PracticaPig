@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         // ------- recojo datos del Intent que envía la SegundaActivity
         juego = intent.getParcelableCompat<Juego>("juego")!!
-        listaJugadores =
-            intent.getParcelableArrayListCompat<Jugador>("jugadoresLista") ?: arrayListOf()
+        listaJugadores = intent.getParcelableArrayListCompat<Jugador>("jugadoresLista") ?: arrayListOf()
 
 
         //------hasta aquii los intent
@@ -161,12 +160,10 @@ class MainActivity : AppCompatActivity() {
             return   //hago que no siga ejecutando y pase ya a la siguiente activity
         }
 
-        binding.textNumeroRondaActual.text =
-            contadorRondas.toString() // muestro la ronda por la que se va
+        binding.textNumeroRondaActual.text = contadorRondas.toString() // muestro la ronda por la que se va
 
         // muestro a quien le corresponde el turno
-        binding.textIdTurnoJugador.text =
-            listaJugadores[indiceJugador].nombre //  nombre según orden barajado
+        binding.textIdTurnoJugador.text = listaJugadores[indiceJugador].nombre //  nombre según orden barajado
     }
 
 
@@ -178,8 +175,7 @@ class MainActivity : AppCompatActivity() {
 
         // vuelve todo a 0 para iniciar una nueva partida
         binding.textNumeroRondaActual.text = contadorRondas.toString()
-        binding.textIdTurnoJugador.text =
-            listaJugadores[indiceJugador].nombre //muestra el nombre del jugador según el orden barajado
+        binding.textIdTurnoJugador.text = listaJugadores[indiceJugador].nombre //muestra el nombre del jugador según el orden barajado
         binding.textPuntuacionActual2.text = "0"
 
         for (jugador in listaJugadores) {
@@ -195,11 +191,9 @@ class MainActivity : AppCompatActivity() {
         visible3: Boolean,
         visible4: Boolean
     ) { // control de visibilidad
-        binding.textJugador3.visibility =
-            if (visible3) View.VISIBLE else View.GONE  // maneja la visibilidad del texto de jugador 3 si se selecciona la opcion de 3 jugadores
+        binding.textJugador3.visibility = if (visible3) View.VISIBLE else View.GONE  // maneja la visibilidad del texto de jugador 3 si se selecciona la opcion de 3 jugadores
 
-        binding.textJugador4.visibility =
-            if (visible4) View.VISIBLE else View.GONE // maneja la visibilidad del del texto del jugador 4 si se seleccionan 4 jugadores
+        binding.textJugador4.visibility = if (visible4) View.VISIBLE else View.GONE // maneja la visibilidad del del texto del jugador 4 si se seleccionan 4 jugadores
 
     }
 
