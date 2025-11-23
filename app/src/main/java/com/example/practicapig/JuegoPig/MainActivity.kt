@@ -9,6 +9,7 @@ import com.example.practicapig.databinding.ActivityMainBinding
 import android.content.Intent
 import android.os.Build
 import android.os.Parcelable
+import com.example.practicapig.BaseDeDatos.Usuario
 import com.example.practicapig.R
 import java.io.Serializable
 
@@ -25,13 +26,19 @@ class MainActivity : AppCompatActivity() {
     private var indiceJugador = 0
     private var puntosTurno = 0
 
+    private var usuario: Usuario? = null
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //----------------------------------------------INTENT------------------------
         // ------- recojo datos del Intent que envía la SegundaActivity
+        usuario = intent.getParcelableCompat<Usuario>("usuario")
         juego = intent.getParcelableCompat<Juego>("juego")!!
         listaJugadores = intent.getParcelableArrayListCompat<Jugador>("jugadoresLista") ?: arrayListOf()
 
@@ -148,13 +155,18 @@ class MainActivity : AppCompatActivity() {
             binding.buttonPasarTurno.isEnabled = false
             binding.imageView.isEnabled = false
 
-            //hago los intent para pasar la informacion a la ultima activity
+            //--------------------------------------Intent--------------------------------
+
+            //hago los intent para pasar la informacion a la ultima activity, paso el juego, es decir el numero de jugadores
+            // y los jugadores, sus nombres y puntuacion
 
             val intentResultado = Intent(this, UltimaActivity::class.java)
             // paso el orden de jugadores
-            intentResultado.putExtra("juego", juego)
+            intentResultado.putExtra("juego", juego)//numero de jugadores
+            intentResultado.putExtra("usuario", usuario)
+
             // paso las puntuaciones
-            intentResultado.putParcelableArrayListExtra("jugadoresFinales", listaJugadores)
+            intentResultado.putParcelableArrayListExtra("jugadoresFinales", listaJugadores)//nombres y puntuaciones d elos jugadores
             startActivity(intentResultado)
             finish() // cierro esta activity
             return   //hago que no siga ejecutando y pase ya a la siguiente activity

@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.practicapig.BaseDeDatos.Usuario
 import com.example.practicapig.databinding.ActivitySegundaBinding
 
 class SegundaActivity : AppCompatActivity() {
@@ -26,34 +27,46 @@ class SegundaActivity : AppCompatActivity() {
     private var jugadoresSeleccionados: Int = 0
     private lateinit var juego: Juego
 
+    private var usuarioApp: Usuario? = null
+
 
 
     //lista de los nombres como objetos
     private val nombresDisponibles = listOf(
-        Jugador("Aitor Tilla",0), Jugador("Ana Conda",0),
-        Jugador("Armando Broncas",0), Jugador("Aurora Boreal",0),
+        Jugador("Aitor Tilla",0),
+        Jugador("Ana Conda",0),
+        Jugador("Armando Broncas",0),
+        Jugador("Aurora Boreal",0),
         Jugador("Bartolo Mesa",0),
-        Jugador("Carmen Mente",0), Jugador("Enrique Cido",0),
-        Jugador("Esteban Dido",0), Jugador("Elba Lazo",0),
+        Jugador("Carmen Mente",0),
+        Jugador("Enrique Cido",0),
+        Jugador("Esteban Dido",0),
+        Jugador("Elba Lazo",0),
         Jugador("Fermin Tado",0),
-        Jugador("Lola Mento",0), Jugador("Luz Cuesta",0),
-        Jugador("Paco Tilla",0), Jugador("Pere Gil",0),
+        Jugador("Lola Mento",0),
+        Jugador("Luz Cuesta",0),
+        Jugador("Paco Tilla",0),
+        Jugador("Pere Gil",0),
         Jugador("Salvador Tumbado",0)
     )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySegundaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        //---------------------------INTENT------------------------------
         //--------recojo los datos del intent
-
         juego = intent.getParcelableCompat<Juego>("juego")!!
+        //------------------------INTENT USUARIO--------------------------------------
+        usuarioApp = intent.getParcelableCompat<Usuario>("usuario")
         rondasSeleccionadas = juego.numRondas
         jugadoresSeleccionados = juego.numJugadores
 
         //-------hasta aqui los intent
+
+
 
         // creo el array con tantas posiciones como jugadores hayan seleccionado
         arrayNombresSeleccionados = arrayOfNulls(jugadoresSeleccionados)
@@ -172,6 +185,7 @@ class SegundaActivity : AppCompatActivity() {
     //una vez elegidos todos los nombres, paso a la siguiente activity
 
     private fun pasarASiguienteActivity() {
+
         //---------------------hago los intent
         //creo un alista de jugadores(objetos)
         val jugadoresFinales = ArrayList<Jugador>()
@@ -179,11 +193,15 @@ class SegundaActivity : AppCompatActivity() {
             val jugadorSeleccionado = arrayNombresSeleccionados[indiceJugador]
             jugadoresFinales.add(Jugador(jugadorSeleccionado?.nombre ?: "Sin nombre", 0))
         }
+
+        //--------------------------------------------------------INTENT------------------------------
         val intentJuego = Intent(this, MainActivity::class.java)
         //paso el objeto juego
         intentJuego.putExtra("juego", juego)
+        intentJuego.putExtra("usuario", usuarioApp)
         //paso la lista de jugadores
         intentJuego.putParcelableArrayListExtra("jugadoresLista", jugadoresFinales)
+
         //paso a la siguiente activity
         startActivity(intentJuego)
         finish()

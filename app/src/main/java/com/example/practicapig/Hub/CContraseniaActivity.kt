@@ -1,9 +1,7 @@
 package com.example.practicapig.Hub
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -23,22 +21,28 @@ class CContraseniaActivity : AppCompatActivity() {
         binding = ActivityCcontraseniaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Recibir usuario
+        //------------------------------INTENT-------------------------
+        // recibo el usuario   INTENT
         val usuario = intent.getParcelableCompat<Usuario>("usuario")
 
         if (usuario == null) {
-            finish()  // Evita crash si no llega usuario
+            finish()  // por si falla el paso del intent, no peta la aplicacion
             return
         }
 
-        // BOTÓN GUARDAR CAMBIOS
+
+        //----------------mensaje----------------------
+        var mensaje= " Cambia aquí tu contraseña ${usuario.nombre}"
+        binding.texto.text = mensaje
+
+        // si doy al boton de guardar cambios se inicia todas las comprobaciones
         binding.guardarCambios.setOnClickListener {
 
-            val vieja = binding.viejaContrasenia.text.toString()
-            val nueva = binding.nuevaContrasenia.text.toString()
-            val repetir = binding.repiteContrasenia.text.toString()
+            val contraseniaVieja = binding.viejaContrasenia.text.toString().trim()
+            val contraseniaNueva = binding.nuevaContrasenia.text.toString().trim()
+            val repetirContrasenia = binding.repiteContrasenia.text.toString().trim()
 
-            // Ocultar errores
+            // oculto errores antiguos
             binding.textView7.visibility = View.GONE
             binding.textView5.visibility = View.GONE
             binding.textView6.visibility = View.GONE
@@ -46,46 +50,59 @@ class CContraseniaActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
 
-                // Validar campos vacíos
-                if (vieja.isEmpty() || nueva.isEmpty() || repetir.isEmpty()) {
+                var hayFallos=false
+
+                // verifico que no hay campos vacíos
+                if (contraseniaVieja.isEmpty() || contraseniaNueva.isEmpty() || repetirContrasenia.isEmpty()) {
                     binding.textErrorVacio.visibility = View.VISIBLE
-                    return@launch
+                    hayFallos=true
                 }
 
-                // Verificar contraseña antigua
-                if (usuario.contraseña != vieja) {
+                // verifico qie la contraseña que introduce en contraseña vieja es la contraseña que pone en la base de datos
+                if (usuario.contraseña != contraseniaVieja) {
                     binding.textView7.visibility = View.VISIBLE
-                    return@launch
+                    hayFallos=true
                 }
 
-                // Validar nueva contraseña
+                // valido nueva contraseña, tiene el formato correcto
                 var contieneNumero = false
-                for (c in nueva) if (c.isDigit()) contieneNumero = true
+                for (c in contraseniaNueva) if (c.isDigit()) contieneNumero = true
 
-                if (nueva.length !in 4..10 || !contieneNumero) {
+                //verifico que la contraseña nueva que esta metiendo no es la contraseña que ya estaba guardada en la base de datos
+                if (contraseniaNueva.length !in 4..10 || !contieneNumero) {
                     binding.textView5.visibility = View.VISIBLE
-                    return@launch
+                    hayFallos=true
+                }
+                //verifico que la nueva contraseña no es igual la vieja
+                if(contraseniaNueva == usuario.contraseña){
+                    binding.textView3.visibility = View.VISIBLE
+                    hayFallos=true
                 }
 
-                // Confirmación de contraseña
-                if (nueva != repetir) {
+                // confirmo la contraseña, si esta igual o no
+                if (contraseniaNueva != repetirContrasenia) {
                     binding.textView6.visibility = View.VISIBLE
-                    return@launch
+                    hayFallos=true
                 }
 
-                // Actualizar en la BD
+                //paro la ejecucuion, muestro todos los errores si hay algo mal
+                if (hayFallos) return@launch
+
+
+                // introduzco la nueva contraseña en la base de datos
                 withContext(Dispatchers.IO) {
                     val dao = DatabaseUsuarios.getDatabase(this@CContraseniaActivity).usuarioDao()
-                    dao.actualizarContrasenia(usuario.nombre, nueva)
+                    dao.actualizarContrasenia(usuario.nombre, contraseniaNueva)
                 }
 
-                // Volver al menú con usuario actualizado
-                val intent = Intent(this@CContraseniaActivity, MenuActivity::class.java)
-                val usuarioActualizado = Usuario(usuario.nombre, nueva, usuario.fecha_nacimiento)
-                intent.putExtra("usuario", usuarioActualizado)
 
+                //-----------------------------------INTENT----------------------------------
+                // vuelvo al menu con el usuario actualizado, INTENT con usuario
+                val intent = Intent(this@CContraseniaActivity, MenuActivity::class.java)
+                val usuarioActualizado = Usuario(usuario.nombre, contraseniaNueva, usuario.fecha_nacimiento)
+                intent.putExtra("usuario", usuarioActualizado)
                 startActivity(intent)
-                finish()
+
             }
         }
     }

@@ -29,120 +29,157 @@ class RegistroActivity : AppCompatActivity() {
             mostrarDatePicker()
         }
 
-        // Botón de registrarse
+        // cuando doy al boton de registrar comienzo todas las comprobaciones
+
         binding.botonRegistro.setOnClickListener {
 
-            // recogo los datos
-            val nombre = binding.nombreUsuario.text.toString()
-            val pass = binding.contrasenia.text.toString()
-            val repetir = binding.repetirContrasenia.text.toString()
-            val fecha = binding.fechaNacimiento.text.toString()
-            val check = binding.checkBoxCondiciones.isChecked
+            val nombre = binding.nombreUsuario.text.toString().trim()
+            val contrasenia = binding.contrasenia.text.toString().trim()
+            val repetirContrasenia = binding.repetirContrasenia.text.toString().trim()
+            val fecha = binding.fechaNacimiento.text.toString().trim()
+            val checkCondiciones = binding.checkBoxCondiciones.isChecked
 
-            //oculto errores anteriores
+            // oculto errores anteriores
             binding.textoErrorUsuario.visibility = View.GONE
             binding.textoErrorCampos.visibility = View.GONE
             binding.textoErrorEdad.visibility = View.GONE
             binding.textoErrorContrasenia.visibility = View.GONE
-            binding.textoContrasenia.visibility = View.VISIBLE
+            binding.textoContrasenia.visibility = View.GONE
             binding.textoErrorCheckbox.visibility = View.GONE
 
             lifecycleScope.launch {
 
-                // valido que no hay nada vacio
-                if (nombre.isEmpty() || pass.isEmpty() || repetir.isEmpty() || fecha.isEmpty()) {
+                if (nombre.isEmpty() || contrasenia.isEmpty() || repetirContrasenia.isEmpty() || fecha.isEmpty()) {
                     binding.textoErrorCampos.visibility = View.VISIBLE
-                    return@launch
-                }
-
-                // valido que esta bien puesta la casilla de condiciones
-                if (!check) {
-                    binding.textoErrorCheckbox.visibility = View.VISIBLE
-                    return@launch
-                }
-
-                // valido que la contraseña es correcta
-                var contieneNumero = false
-                for (d in pass) if (d.isDigit()) contieneNumero = true
-
-                if (pass.length !in 4..10 || !contieneNumero) {
                     binding.textoContrasenia.visibility = View.VISIBLE
                     return@launch
                 }
 
-                // si las contraseñas son iguales esta bien
-                if (pass != repetir) {
-                    binding.textoErrorContrasenia.visibility = View.VISIBLE
-                    return@launch
+                var hayErrores = false
+
+                // compruebo campos vacios
+                if (nombre.isEmpty() || contrasenia.isEmpty() || repetirContrasenia.isEmpty() || fecha.isEmpty()) {
+                    binding.textoErrorCampos.visibility = View.VISIBLE
+                    hayErrores = true
                 }
 
-                // valido que es mayor de edad
+                // compruebo el check de condiciones
+                if (!checkCondiciones) {
+                    binding.textoErrorCheckbox.visibility = View.VISIBLE
+                    hayErrores = true
+                }
+
+                // compruebo contraseña formato correcto
+                var contieneNumero = false
+                for (d in contrasenia) if (d.isDigit()) contieneNumero = true
+
+                if (contrasenia.length !in 4..10 || !contieneNumero) {
+                    binding.textoContrasenia.visibility = View.VISIBLE
+                    hayErrores = true
+                }else{
+                    binding.textoContrasenia.visibility = View.GONE
+                }
+
+                // compruebo segunda contraseña=primera contraseña
+                if (contrasenia != repetirContrasenia) {
+                    binding.textoErrorContrasenia.visibility = View.VISIBLE
+                    hayErrores = true
+                }
+
+                // compruebo que es mayor de edad
                 if (!esMayorEdad(fecha)) {
                     binding.textoErrorEdad.visibility = View.VISIBLE
-                    return@launch
+                    hayErrores = true
                 }
 
-                // valido que el usuario existe
+                // compruebo si existe el usuario
                 val usuarioExistente = withContext(Dispatchers.IO) {
                     val dao = DatabaseUsuarios.getDatabase(this@RegistroActivity).usuarioDao()
                     dao.buscarPorNombre(nombre)
                 }
 
-                if (usuarioExistente != null) {
+                if (usuarioExistente != null||nombre.length < 4 || nombre.length > 10) {
                     binding.textoErrorUsuario.visibility = View.VISIBLE
-                    return@launch
+                    hayErrores = true
                 }
 
-                // inserto usuario en la base de datos
+                // si se han encontrado errores arriba, el programa no avanza y saltan los errores
+                if (hayErrores) return@launch
+
+                // si todo va bien, introduzco en nuevo usuario en la base de datos
                 withContext(Dispatchers.IO) {
                     val dao = DatabaseUsuarios.getDatabase(this@RegistroActivity).usuarioDao()
-                    dao.insertarUsuario(Usuario(nombre, pass, fecha))
+                    dao.insertarUsuario(Usuario(nombre, contrasenia, fecha))
                 }
 
-                // realizo intent para ir a la pantalla login
+                //---------------------INTENT-----------------------------
+                // paso a la pantalla de login con INTENT vacio, no hace falta pasar nada aqui
+                //debe iniciar sesion una vez alli con el usuario que quiera
                 val intent = Intent(this@RegistroActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
         }
 
-        // Botón de ir a Login sin registrarse
+        //-----------------------INTENT----------------------------------
+        // para ir al login si ya estas registrado con INTENT vacio tambien porque no has hecho nada el usuario ya estaba creado
         binding.botonInicioSesion.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+
         }
     }
 
-    // --- CALENDARIO ---
+    // muestro el calendario
     private fun mostrarDatePicker() {
-        val c = Calendar.getInstance()
-        val dp = DatePickerDialog(
+        val calendarioActual = Calendar.getInstance()
+
+        val anioActual = calendarioActual.get(Calendar.YEAR)
+        val mesActual = calendarioActual.get(Calendar.MONTH)
+        val diaActual = calendarioActual.get(Calendar.DAY_OF_MONTH)
+
+        val selectorFecha = DatePickerDialog(
             this,
-            { _: DatePicker, y: Int, m: Int, d: Int ->
-                binding.fechaNacimiento.setText("$d/${m + 1}/$y")
+            { _: DatePicker, anioSeleccionado: Int, mesSeleccionado: Int, diaSeleccionado: Int ->
+                binding.fechaNacimiento.setText("$diaSeleccionado/${mesSeleccionado + 1}/$anioSeleccionado")
             },
-            c.get(Calendar.YEAR),
-            c.get(Calendar.MONTH),
-            c.get(Calendar.DAY_OF_MONTH)
+            anioActual,
+            mesActual,
+            diaActual
         )
-        dp.show()
+
+        selectorFecha.show()
     }
 
-    // --- EDAD ---
+    // compruebo que sea mayor de edad
     private fun esMayorEdad(fecha: String): Boolean {
-        val p = fecha.split("/")
-        if (p.size != 3) return false
 
-        val d = p[0].toInt()
-        val m = p[1].toInt() - 1
-        val y = p[2].toInt()
+        val partesFecha = fecha.split("/")
+
+        if (partesFecha.size != 3) return false
+
+        val diaNacimiento = partesFecha[0].toInt()
+        val mesNacimiento = partesFecha[1].toInt() - 1   // meses va de 0 a 11
+        val anioNacimiento = partesFecha[2].toInt()
 
         val hoy = Calendar.getInstance()
-        val nac = Calendar.getInstance()
-        nac.set(y, m, d)
 
-        var edad = hoy.get(Calendar.YEAR) - nac.get(Calendar.YEAR)
-        if (hoy.get(Calendar.DAY_OF_YEAR) < nac.get(Calendar.DAY_OF_YEAR)) edad--
+        //introduzco en una variable la fecha de usuario
+        val fechaNacimiento = Calendar.getInstance()
+        fechaNacimiento.set(anioNacimiento, mesNacimiento, diaNacimiento)
 
+        //calculo la edad cogiendo la fecha actual y restandole la edad que ha introducido el usuario
+        var edad = hoy.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR)
+
+        //comparo los dias de ambas fechas para ver si ha pasado el cumpleaños
+        val diaDelAñoActual = hoy.get(Calendar.DAY_OF_YEAR)
+        val diaDelAñoNacimiento = fechaNacimiento.get(Calendar.DAY_OF_YEAR)
+
+        // si aun no ha pasado su cumpleaños, resto 1 a la edad
+        if (diaDelAñoActual < diaDelAñoNacimiento) {
+            edad--
+        }
+
+        // aqui ya devuelvo si es mayor o no
         return edad >= 18
     }
 }

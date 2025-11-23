@@ -1,17 +1,19 @@
 package com.example.practicapig.JuegoPig
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.practicapig.BaseDeDatos.Usuario
+import com.example.practicapig.Hub.LoginActivity
+import com.example.practicapig.Hub.MenuActivity
 import com.example.practicapig.databinding.ActivityUltimaBinding
 
 class UltimaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUltimaBinding
-
-    // arrays recibidos por Intent: nombres y puntos
-
     private lateinit var juego: Juego
     private lateinit var listaJugadores: ArrayList<Jugador>
 
@@ -22,13 +24,15 @@ class UltimaActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        //-------------------------------INTENT------------------------------------------
         //-----------recojo los datos del intent
 
+        val usuario = intent.getParcelableCompat<Usuario>("usuario")
         juego = intent.getParcelableCompat<Juego>("juego")!!
         listaJugadores =
             intent.getParcelableArrayListCompat<Jugador>("jugadoresFinales") ?: arrayListOf()
 
-        // -------- Calculo el mensaje final
+        // -------- calculo el mensaje final
         var maxPuntos = 0
         for (jugador in listaJugadores) {
             if (jugador.puntos > maxPuntos) {
@@ -69,20 +73,35 @@ class UltimaActivity : AppCompatActivity() {
         binding.textJugador2.text = listaJugadores[1].toString()
 
 
-        // jugador 3
-        binding.textJugador3.text = listaJugadores[2].toString()
+        if (listaJugadores.size >= 3) {
+            binding.textJugador3.visibility = View.VISIBLE
+            binding.textJugador3.text = listaJugadores[2].toString()
+        } else {
+            binding.textJugador3.visibility = View.GONE
+        }
 
-
-
-        // jugador 4
-        binding.textJugador4.text = listaJugadores[3].toString()
-
+        if (listaJugadores.size == 4) {
+            binding.textJugador4.visibility = View.VISIBLE
+            binding.textJugador4.text = listaJugadores[3].toString()
+        } else {
+            binding.textJugador4.visibility = View.GONE
+        }
 
 
 
         // -------mensaje final
 
         binding.textMensajeFinal.text = mensaje
+
+        //------------------------------------INTENT----------------------------------
+        //intent vacio para colver al menu
+
+        binding.pasarAMenu.setOnClickListener {
+            val intent = Intent(this@UltimaActivity, MenuActivity::class.java)
+            intent.putExtra("usuario", usuario)
+            startActivity(intent)
+            finish()
+        }
     }
 
 

@@ -6,22 +6,6 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/nombreUsuario"
-        android:layout_width="188dp"
-        android:layout_height="25dp"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textSize="15sp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.874"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.053" />
-
-    <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,4 +29,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/img" />
+
+    <LinearLayout
+        android:layout_width="412dp"
+        android:layout_height="46dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.106"
+        tools:layout_editor_absoluteX="-1dp"
+        android:background="#C2BBB9">
+
+        <TextView
+            android:id="@+id/nombreUsuario"
+            android:layout_width="378dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="30sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

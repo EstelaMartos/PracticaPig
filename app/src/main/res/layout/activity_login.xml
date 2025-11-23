@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:padding="24dp">
 
+
     <ImageView
         android:id="@+id/imageViewUsuario"
         android:layout_width="140dp"
@@ -14,11 +15,10 @@
         android:src="@drawable/imagen_usuario"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.154" />
-
+        app:layout_constraintVertical_bias="0.116" />
 
     <EditText
         android:id="@+id/nombreUsuario"
@@ -32,14 +32,14 @@
         app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
+        app:layout_constraintVertical_bias="0.346" />
 
     <TextView
         android:id="@+id/textUsuarioRegistrado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="296dp"
+        android:layout_marginTop="284dp"
         android:text="Este usuario no existe"
         android:textColor="#FF0000"
         android:textSize="12sp"
@@ -64,7 +64,7 @@
         android:id="@+id/textErrorLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Usuario o contraseña incorrectos"
+        android:text="Contraseña incorrecta"
         android:textColor="#FF0000"
         android:textSize="12sp"
         android:visibility="gone"

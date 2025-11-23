@@ -22,21 +22,29 @@ class MenuActivity: AppCompatActivity() {
         setContentView(binding.root)
 
 
-
+        //--------------INTENT-----------------------------------
         //recoger intent
         val usuario = intent.getParcelableCompat<Usuario>("usuario")
         binding.nombreUsuario.text = usuario?.nombre ?: "Usuario no encontrado"
 
 
+        //si pulsan en el nombre del usuario, me dirige a la pantalla de cambiar contraseña
         binding.nombreUsuario.setOnClickListener {
+            //intents para pasar a la pantalla del cambio de contraseña, paso el usuario
             val intent = Intent(this, CContraseniaActivity::class.java)
             intent.putExtra("usuario", usuario)
             startActivity(intent)
         }
 
+
+        //-------------------------------------------INTENT---------------------------------------
+        //si pulsan la imagen del juego, se va al juego, INTENT vacio
         binding.imagenJuego.setOnClickListener {
+            //intent para dirigir al juego, no paso usuario porque no es necesario
             val intent = Intent(this, PrimeraActivity::class.java)
+            intent.putExtra("usuario", usuario)
             startActivity(intent)
+
         }
 
 

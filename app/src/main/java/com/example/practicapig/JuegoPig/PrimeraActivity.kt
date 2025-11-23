@@ -8,6 +8,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.practicapig.BaseDeDatos.Usuario
+import com.example.practicapig.Hub.getParcelableCompat
 import com.example.practicapig.databinding.ActivityPrimeraBinding
 import com.example.practicapig.JuegoPig.Juego
 
@@ -22,6 +24,9 @@ class PrimeraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPrimeraBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //------------------------------------INTENT USUARIO-----------------------------------
+        val usuario = intent.getParcelableCompat<Usuario>("usuario")
 
 
         //creacion del spinner
@@ -63,8 +68,11 @@ class PrimeraActivity : AppCompatActivity() {
                         numJugadores = jugadoresSeleccionados!!,
                         numRondas = rondasSeleccionadas!!
                     )
+
+                    //----------------------------INTENT-----------------------
                     val intent = Intent(this@PrimeraActivity, SegundaActivity::class.java)
                     intent.putExtra("juego", juego)
+                    intent.putExtra("usuario", usuario)
                     startActivity(intent)
                     finish()
                 }else{
