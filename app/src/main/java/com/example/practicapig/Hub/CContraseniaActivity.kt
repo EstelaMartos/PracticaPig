@@ -68,12 +68,12 @@ class CContraseniaActivity : AppCompatActivity() {
                 var contieneNumero = false
                 for (c in contraseniaNueva) if (c.isDigit()) contieneNumero = true
 
-                //verifico que la contraseña nueva que esta metiendo no es la contraseña que ya estaba guardada en la base de datos
+                //verifico que la contraseña nueva tiene el largo adecuado
                 if (contraseniaNueva.length !in 4..10 || !contieneNumero) {
                     binding.textView5.visibility = View.VISIBLE
                     hayFallos=true
                 }
-                //verifico que la nueva contraseña no es igual la vieja
+                //verifico que la nueva contraseña no es igual la que ponia en la base de datos
                 if(contraseniaNueva == usuario.contraseña){
                     binding.textView3.visibility = View.VISIBLE
                     hayFallos=true

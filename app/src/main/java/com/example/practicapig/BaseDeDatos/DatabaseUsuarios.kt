@@ -17,6 +17,7 @@ abstract class DatabaseUsuarios : RoomDatabase() {
 
         fun getDatabase(context: Context): DatabaseUsuarios {
             return INSTANCE ?: synchronized(this) {
+                //se crea la base de datos si no existe
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     DatabaseUsuarios::class.java,

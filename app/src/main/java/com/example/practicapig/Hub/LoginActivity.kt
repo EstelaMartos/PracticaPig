@@ -18,10 +18,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var preferenciasUsuario: PreferenciasUsuario
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         preferenciasUsuario = PreferenciasUsuario(applicationContext)
 
@@ -30,12 +33,19 @@ class LoginActivity : AppCompatActivity() {
         configurarCheck() //para que se active y desactive el check según procede
 
         // si pulso el boton de iniciar sesion inicia todo
+
         binding.botonIniciarSesion.setOnClickListener {
             iniciarSesion()
         }
     }
 
+
     private fun iniciarSesion() {
+
+        binding.textUsuarioRegistrado.visibility = View.GONE
+        binding.textErrorLogin.visibility = View.GONE
+
+
         val nombreUsuario = binding.nombreUsuario.text.toString().trim()
         val contrasenia = binding.contrasenia.text.toString().trim()
 
@@ -61,14 +71,15 @@ class LoginActivity : AppCompatActivity() {
             }
 
             //si hay errores paro la app y muestro los errores, no sigo avanzando
-            if (hayErrores) return@launch
+            if (hayErrores)return@launch
+
 
             // para comprobar si el usuario desmarco voluntariamente el check
             val usuarioGuardado = preferenciasUsuario.nombreUsuario.first() //me devuelve lo que esta guardado ene se momento de la ejecucion
             val passGuardada = preferenciasUsuario.contraseñaUsuario.first()
             val checkGuardado = preferenciasUsuario.recordar.first()
 
-            // borro las preferencias si el el propiousuario guardado el que elimina el check
+            // borro las preferencias si el el propio usuario guardado el que elimina el check
             if (usuarioGuardado == nombreUsuario &&
                 passGuardada == contrasenia &&
                 checkGuardado &&
@@ -92,6 +103,8 @@ class LoginActivity : AppCompatActivity() {
 
         }
     }
+
+
 
     private fun cargarPreferencias() {
         lifecycleScope.launch {

@@ -36,7 +36,7 @@ class RegistroActivity : AppCompatActivity() {
             val nombre = binding.nombreUsuario.text.toString().trim()
             val contrasenia = binding.contrasenia.text.toString().trim()
             val repetirContrasenia = binding.repetirContrasenia.text.toString().trim()
-            val fecha = binding.fechaNacimiento.text.toString().trim()
+            val fecha = binding.fechaNacimiento.text.toString().trim() //aqui se almacena la fecha seleccionada por el usuario
             val checkCondiciones = binding.checkBoxCondiciones.isChecked
 
             // oculto errores anteriores
@@ -49,6 +49,7 @@ class RegistroActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
 
+                //si hay algun campo vacio muestro mensaje de error y no sigo
                 if (nombre.isEmpty() || contrasenia.isEmpty() || repetirContrasenia.isEmpty() || fecha.isEmpty()) {
                     binding.textoErrorCampos.visibility = View.VISIBLE
                     binding.textoContrasenia.visibility = View.VISIBLE
@@ -56,12 +57,6 @@ class RegistroActivity : AppCompatActivity() {
                 }
 
                 var hayErrores = false
-
-                // compruebo campos vacios
-                if (nombre.isEmpty() || contrasenia.isEmpty() || repetirContrasenia.isEmpty() || fecha.isEmpty()) {
-                    binding.textoErrorCampos.visibility = View.VISIBLE
-                    hayErrores = true
-                }
 
                 // compruebo el check de condiciones
                 if (!checkCondiciones) {
@@ -93,10 +88,10 @@ class RegistroActivity : AppCompatActivity() {
                 }
 
                 // compruebo si existe el usuario
-                val usuarioExistente = withContext(Dispatchers.IO) {
-                    val dao = DatabaseUsuarios.getDatabase(this@RegistroActivity).usuarioDao()
-                    dao.buscarPorNombre(nombre)
-                }
+                val usuarioExistente = withContext(Dispatchers.IO) {//cambio de hilo para lanzar la consulta
+                    val dao = DatabaseUsuarios.getDatabase(this@RegistroActivity).usuarioDao()//obtiene la base de datos y accede a las consultas
+                    dao.buscarPorNombre(nombre)//accede a la query buscar por nombre
+                } //si el usuario existe devuelve su nombre y si no existe devuelve null
 
                 if (usuarioExistente != null||nombre.length < 4 || nombre.length > 10) {
                     binding.textoErrorUsuario.visibility = View.VISIBLE
@@ -109,7 +104,7 @@ class RegistroActivity : AppCompatActivity() {
                 // si todo va bien, introduzco en nuevo usuario en la base de datos
                 withContext(Dispatchers.IO) {
                     val dao = DatabaseUsuarios.getDatabase(this@RegistroActivity).usuarioDao()
-                    dao.insertarUsuario(Usuario(nombre, contrasenia, fecha))
+                    dao.insertarUsuario(Usuario(nombre, contrasenia, fecha))//introduzco el objeto Usuario en la bbdd
                 }
 
                 //---------------------INTENT-----------------------------

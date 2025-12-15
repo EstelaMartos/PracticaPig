@@ -108,8 +108,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     // suma y muestra puntos del turno
                     puntosTurno += tirada // los puntos del turno son los equivalentes al número del dado
-                    binding.textPuntuacionActual2.text =
-                        puntosTurno.toString() // se muestra en el textview
+                    binding.textPuntuacionActual2.text = puntosTurno.toString() // se muestra en el textview
                 }
             }
         })
