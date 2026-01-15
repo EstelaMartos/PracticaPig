@@ -55,7 +55,7 @@ class FireBaseCon : AppCompatActivity() {
             binding.textEstado.text = "No estás autenticado con Google"
 
         } else {
-
+            //leo lo que pone el usuario
             val artista = binding.editArtista.text.toString().trim()
             val cancion = binding.editCancion.text.toString().trim()
             val duracionTexto = binding.editDuracion.text.toString().trim()
@@ -96,12 +96,12 @@ class FireBaseCon : AppCompatActivity() {
 
                                     db.collection("musicfyEMG")
                                         .get()
-                                        .addOnSuccessListener { resultados ->
+                                        .addOnSuccessListener { resultados ->//resultados=lista docs(cada doc 1 cancion)
 
                                             var existe = false
 
-
-                                            for (documentos in resultados) {
+                                            //recorro una a una las canciones
+                                            for (documentos in resultados) {//bucle for para buscar duplicados
                                                 val artistaBD = documentos.getString("artista") ?: ""
                                                 val cancionBD = documentos.getString("canción") ?: ""
 
@@ -119,7 +119,7 @@ class FireBaseCon : AppCompatActivity() {
                                                 binding.textEstado.text = "Ya existe una canción con ese artista y ese nombre"
 
                                             } else {
-
+                                                //representa 1 doc
                                                 val cancionMap = hashMapOf(
                                                     "artista" to artista,
                                                     "canción" to cancion,
@@ -129,7 +129,7 @@ class FireBaseCon : AppCompatActivity() {
                                                 )
 
                                                 db.collection("musicfyEMG")
-                                                    .add(cancionMap)
+                                                    .add(cancionMap)//añado el mapa
                                                     .addOnSuccessListener {
                                                         binding.textEstado.text = "Canción añadida correctamente"
                                                     }

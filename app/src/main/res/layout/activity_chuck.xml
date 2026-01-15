@@ -61,14 +61,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/botonAleatorio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="chiste aleatorio"
-        app:layout_constraintBottom_toTopOf="@+id/textChiste"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCategorias" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
