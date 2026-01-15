@@ -27,6 +27,11 @@ class ChuckActivity : AppCompatActivity() {
 
         val service = retrofit.create(ApiServiceChuck::class.java)
 
+        //prueba examen luego borrar
+        binding.botonAleatorio.setOnClickListener {
+            cargarChisteAleatorio(service)
+        }
+
         // ---------- cargo las categorias de la api ----------
         val cargarCategorias = service.getCategorias()
 
@@ -83,11 +88,9 @@ class ChuckActivity : AppCompatActivity() {
         })
     }
 
-    // --------------------------------------cargo el chiste
-    private fun cargarChiste(
-        service: ApiServiceChuck,
-        categoria: String
-    ) {
+    // --------------------------------------cargo el chiste-----------------------------------
+    private fun cargarChiste(service: ApiServiceChuck, categoria: String)
+    {
 
         val callChiste = service.getChistePorCategoria(categoria)
 
@@ -107,4 +110,27 @@ class ChuckActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun cargarChisteAleatorio(service: ApiServiceChuck) {
+
+        val callChiste = service.getChisteAleatorio()
+
+        callChiste.enqueue(object : Callback<ApiResponseChuck> {
+
+            override fun onResponse(
+                call: Call<ApiResponseChuck>,
+                response: Response<ApiResponseChuck>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    binding.textChiste.text = response.body()!!.value
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponseChuck>, t: Throwable) {
+                binding.textChiste.text = "Error al cargar el chiste aleatorio"
+                Log.d("Chuck", "Error chiste aleatorio")
+            }
+        })
+    }
+
 }

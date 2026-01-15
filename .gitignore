@@ -13,3 +13,12 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Firebase / Google
+app/google-services.json
+google-services.json
+
+# Android Studio
+.idea/
+.gradle/
+build/
+local.properties
