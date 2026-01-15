@@ -116,17 +116,17 @@ class FireBaseSin : AppCompatActivity() {
 
                     //aqui estoy extrayendo los datos de la base de datos
                     for (documentos in result) {
-
+                        //leo los datos del documento
                         val artista = documentos.getString("artista") ?: ""  //leo el campo x del documento si no exiete pone ""
                         val cancion = documentos.getString("canción") ?: ""
                         val duracion = documentos.getLong("duración")
                         val reproducciones = documentos.getLong("reproducciones")
                         val valoracion = documentos.getLong("valoración")
-
+                        //si esta vacio muestro all y si hay coincidencias lo muetsro
                         if (textoBusqueda.isEmpty() || artista.contains(textoBusqueda, ignoreCase = true)
                         ) {
                             hayResultados = true
-
+                            //voy construyendo un texto largo concatenando
                             textoResultado += "Artista: $artista\n"
                             textoResultado += "Canción: $cancion\n"
                             textoResultado += "Duración: ${formatearDuracion(duracion)}\n"
