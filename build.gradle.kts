@@ -2,5 +2,9 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
-    id ("org.jetbrains.kotlin.plugin.serialization") version "1.7.10" apply false
+    id ("org.jetbrains.kotlin.plugin.serialization") version "2.1.0" apply false //he cambiado a "2.1.0"
+    id("com.google.devtools.ksp") version "2.0.21-1.0.25" apply false //"2.1.0-1.0.25"
+
+    //De firebase
+    id("com.google.gms.google-services") version "4.4.4" apply false
 }

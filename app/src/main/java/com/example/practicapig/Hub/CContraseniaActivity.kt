@@ -99,7 +99,7 @@ class CContraseniaActivity : AppCompatActivity() {
                 //-----------------------------------INTENT----------------------------------
                 // vuelvo al menu con el usuario actualizado, INTENT con usuario
                 val intent = Intent(this@CContraseniaActivity, MenuActivity::class.java)
-                val usuarioActualizado = Usuario(usuario.nombre, contraseniaNueva, usuario.fecha_nacimiento)
+                val usuarioActualizado = Usuario(usuario.nombre, contraseniaNueva, usuario.fecha_nacimiento,usuario.avatar)
                 intent.putExtra("usuario", usuarioActualizado)
                 startActivity(intent)
 

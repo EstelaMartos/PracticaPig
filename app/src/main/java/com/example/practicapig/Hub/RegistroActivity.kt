@@ -3,21 +3,39 @@ package com.example.practicapig.Hub
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.practicapig.BaseDeDatos.DatabaseUsuarios
 import com.example.practicapig.BaseDeDatos.Usuario
+import com.example.practicapig.ConsumoApis.ApiResponse
+import com.example.practicapig.ConsumoApis.ApiService
 import com.example.practicapig.databinding.ActivityRegistroBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
+
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+
 private lateinit var binding: ActivityRegistroBinding
 
+
+
+
 class RegistroActivity : AppCompatActivity() {
+
+    private var avatarSeleccionado: String? = null
+    private var generoSeleccionado: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +45,26 @@ class RegistroActivity : AppCompatActivity() {
         // abro el calendario
         binding.fechaNacimiento.setOnClickListener {
             mostrarDatePicker()
+        }
+
+        //selecciono genero
+        seleccionarGenero()
+
+        //seleccionar avatar
+        binding.imagenAvatar1.setOnClickListener {
+            avatarSeleccionado = binding.imagenAvatar1.tag as String
+            marcarAvatarSeleccionado(1)
+        }
+
+        binding.imagenAvatar2.setOnClickListener {
+            avatarSeleccionado = binding.imagenAvatar2.tag as String
+            marcarAvatarSeleccionado(2)
+        }
+
+        //refrescar avatares
+        binding.buttonRefrescar.setOnClickListener {
+            avatarSeleccionado = null
+            generoSeleccionado?.let { cargarAvatares(it) }
         }
 
         // cuando doy al boton de registrar comienzo todas las comprobaciones
@@ -39,6 +77,8 @@ class RegistroActivity : AppCompatActivity() {
             val fecha = binding.fechaNacimiento.text.toString().trim() //aqui se almacena la fecha seleccionada por el usuario
             val checkCondiciones = binding.checkBoxCondiciones.isChecked
 
+
+
             // oculto errores anteriores
             binding.textoErrorUsuario.visibility = View.GONE
             binding.textoErrorCampos.visibility = View.GONE
@@ -50,7 +90,7 @@ class RegistroActivity : AppCompatActivity() {
             lifecycleScope.launch {
 
                 //si hay algun campo vacio muestro mensaje de error y no sigo
-                if (nombre.isEmpty() || contrasenia.isEmpty() || repetirContrasenia.isEmpty() || fecha.isEmpty()) {
+                if (nombre.isEmpty() || contrasenia.isEmpty() || repetirContrasenia.isEmpty() || fecha.isEmpty() ) {
                     binding.textoErrorCampos.visibility = View.VISIBLE
                     binding.textoContrasenia.visibility = View.VISIBLE
                     return@launch
@@ -61,8 +101,15 @@ class RegistroActivity : AppCompatActivity() {
                 // compruebo el check de condiciones
                 if (!checkCondiciones) {
                     binding.textoErrorCheckbox.visibility = View.VISIBLE
+
+                }
+
+                //compruebo que no dejen vacío el campo del avatar
+                if (avatarSeleccionado == null) {
+                    binding.textErrorAvatar.visibility = View.VISIBLE
                     hayErrores = true
                 }
+
 
                 // compruebo contraseña formato correcto
                 var contieneNumero = false
@@ -104,7 +151,7 @@ class RegistroActivity : AppCompatActivity() {
                 // si todo va bien, introduzco en nuevo usuario en la base de datos
                 withContext(Dispatchers.IO) {
                     val dao = DatabaseUsuarios.getDatabase(this@RegistroActivity).usuarioDao()
-                    dao.insertarUsuario(Usuario(nombre, contrasenia, fecha))//introduzco el objeto Usuario en la bbdd
+                    dao.insertarUsuario(Usuario(nombre, contrasenia, fecha, avatarSeleccionado!!))//introduzco el objeto Usuario en la bbdd
                 }
 
                 //---------------------INTENT-----------------------------
@@ -114,6 +161,8 @@ class RegistroActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+
 
         //-----------------------INTENT----------------------------------
         // para ir al login si ya estas registrado con INTENT vacio tambien porque no has hecho nada el usuario ya estaba creado
@@ -176,5 +225,91 @@ class RegistroActivity : AppCompatActivity() {
 
         // aqui ya devuelvo si es mayor o no
         return edad >= 18
+    }
+
+
+    //bajo la opacidad al avatar no seleccionado
+    private fun marcarAvatarSeleccionado(seleccion: Int) {
+        binding.imagenAvatar1.alpha = if (seleccion == 1) 1f else 0.5f
+        binding.imagenAvatar2.alpha = if (seleccion == 2) 1f else 0.5f
+    }
+
+
+    //funcion para seleccionar el genero entre hombre mujer deconocido o sin genero de la api
+    private fun seleccionarGenero() {
+
+        binding.textHombre.setOnClickListener {
+            generoSeleccionado = "Male"
+            cargarAvatares("Male")
+            visibilidadApi()
+        }
+
+        binding.textMujer.setOnClickListener {
+            generoSeleccionado = "Female"
+            cargarAvatares("Female")
+            visibilidadApi()
+        }
+
+        binding.textSinGenero.setOnClickListener {
+            generoSeleccionado = "Genderless"
+            cargarAvatares("Genderless")
+            visibilidadApi()
+        }
+
+        binding.textDesconocido.setOnClickListener {
+            generoSeleccionado = "unknown"
+            cargarAvatares("unknown")
+            visibilidadApi()
+        }
+    }
+
+
+
+
+    //-------------------------------uso de apis para cargar los avatares--------------------------------
+    private fun cargarAvatares(gender: String) {
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://rickandmortyapi.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(ApiService::class.java)
+        val call = service.getCharactersByGender(gender)
+
+        call.enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(
+                call: Call<ApiResponse>,
+                response: Response<ApiResponse>
+            ) {
+                if (response.isSuccessful) {
+
+                    val personajes = response.body()?.results ?: return
+                    val seleccionados = personajes.shuffled().take(2)
+
+                    Picasso.get().load(seleccionados[0].image).into(binding.imagenAvatar1)
+                    Picasso.get().load(seleccionados[1].image).into(binding.imagenAvatar2)
+
+                    binding.imagenAvatar1.tag = seleccionados[0].image
+                    binding.imagenAvatar2.tag = seleccionados[1].image
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.d("Estela", "Error api")
+            }
+        })
+    }
+
+    //la visibilidad de los botones
+    private fun visibilidadApi(){
+        binding.imagenAvatar1.visibility = View.VISIBLE
+        binding.imagenAvatar2.visibility = View.VISIBLE
+        binding.buttonRefrescar.visibility = View.VISIBLE
+        binding.textEligeAvatar.visibility = View.GONE
+        binding.textHombre.visibility = View.GONE
+        binding.textMujer.visibility = View.GONE
+        binding.textSinGenero.visibility = View.GONE
+        binding.textDesconocido.visibility = View.GONE
     }
 }

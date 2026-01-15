@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.practicapig.BaseDeDatos.Usuario
 
-@Database(entities = [Usuario::class], version = 1, exportSchema = false)
+@Database(entities = [Usuario::class], version = 2, exportSchema = false)
 abstract class DatabaseUsuarios : RoomDatabase() {
 
     abstract fun usuarioDao(): DatabaseDAO
@@ -22,7 +22,9 @@ abstract class DatabaseUsuarios : RoomDatabase() {
                     context.applicationContext,
                     DatabaseUsuarios::class.java,
                     "bd_emg" //esto es el nombre de la base de datos
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

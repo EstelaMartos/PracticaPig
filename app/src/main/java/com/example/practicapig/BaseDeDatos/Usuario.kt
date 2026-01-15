@@ -15,4 +15,5 @@ data class Usuario(
     //@ColumnInfo sirve para personalizar el nombre de una columna en la base de datos
     @ColumnInfo(name = "contraseña") val contraseña : String,
     @ColumnInfo(name = "fecha_nacimiento") val fecha_nacimiento : String,
+    @ColumnInfo(name = "avatar") val avatar : String,
 ): Parcelable

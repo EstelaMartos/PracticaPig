@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PracticaPig</string>
+    <string name="google_app_id">521939115808-134kqrhhoudoj8nd04scabhm28ckbt20.apps.googleusercontent.com</string>
+    <string name="default_web_client_id"> 521939115808</string>
 </resources>

@@ -8,16 +8,18 @@
 
 
     <ImageView
-        android:id="@+id/imageViewUsuario"
+        android:id="@+id/imagenAvatar2"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/imagen_usuario"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.004"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.062" />
+        app:layout_constraintVertical_bias="0.039"
+        app:srcCompat="@drawable/imagen_usuario" />
 
     <EditText
         android:id="@+id/nombreUsuario"
@@ -211,5 +213,109 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.943" />
+
+    <ImageView
+        android:id="@+id/imagenAvatar1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/nombreUsuario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/imagenAvatar2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.378"
+        app:srcCompat="@drawable/imagen_usuario" />
+
+    <TextView
+        android:id="@+id/textEligeAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Elige que tipo de avatar quieres elegir:"
+        android:textColor="#000000"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/nombreUsuario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404" />
+
+    <TextView
+        android:id="@+id/textDesconocido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="Desconocido"
+        android:textColor="#000000"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.942"
+        app:layout_constraintStart_toEndOf="@+id/textSinGenero"
+        app:layout_constraintTop_toBottomOf="@+id/textEligeAvatar" />
+
+    <TextView
+        android:id="@+id/textSinGenero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:text="Sin genero"
+        android:textColor="#000000"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/textHombre"
+        app:layout_constraintTop_toBottomOf="@+id/textEligeAvatar" />
+
+    <TextView
+        android:id="@+id/textHombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Hombre"
+        android:textColor="#000000"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/textMujer"
+        app:layout_constraintTop_toBottomOf="@+id/textEligeAvatar" />
+
+    <TextView
+        android:id="@+id/textMujer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="24dp"
+        android:text="Mujer"
+        android:textColor="#000000"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textEligeAvatar" />
+
+    <Button
+        android:id="@+id/buttonRefrescar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refrescar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/nombreUsuario"
+        app:layout_constraintEnd_toStartOf="@+id/imagenAvatar1"
+        app:layout_constraintStart_toEndOf="@+id/imagenAvatar2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textErrorAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:text="*Debes seleccionar un avatar"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonInicioSesion"
+        app:layout_constraintVertical_bias="0.47" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "521939115808",
+    "project_id": "dam2emg",
+    "storage_bucket": "dam2emg.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521939115808:android:a739a2bafac5f6cd12c145",
+        "android_client_info": {
+          "package_name": "com.example.practicapig"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521939115808-1nef0sbc0d26q0sqniq0t1tol7p1oi23.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.practicapig",
+            "certificate_hash": "37dbac6c0657bd62ff1e0b9da2b20583e5458960"
+          }
+        },
+        {
+          "client_id": "521939115808-134kqrhhoudoj8nd04scabhm28ckbt20.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASOd-m4hkoo4ijx9Ic54byefyiHBT-JRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521939115808-134kqrhhoudoj8nd04scabhm28ckbt20.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
