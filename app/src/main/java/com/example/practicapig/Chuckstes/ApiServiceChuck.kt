@@ -12,14 +12,6 @@ interface ApiServiceChuck {
     @GET("jokes/categories")
     fun getCategorias(): Call<List<String>>
 
-    //probando para examen luego borrar
-    //devuelve un chiste aleatorio.
-    //Endpoint: GET /jokes/random
-    @GET("jokes/random")
-    fun getChisteAleatorio(): Call<ApiResponseChuck>
-
-
-
      //devuelve un chiste aleatorio de una categoría concreta.
      //Endpoint: GET /jokes/random?category=animal, por esto se usa query en vez de path, porque va despues de ?
 
