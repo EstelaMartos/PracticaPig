@@ -71,7 +71,7 @@ class FireBaseSin : AppCompatActivity() {
         binding.layoutArtistas.visibility = View.VISIBLE
         binding.layoutValoraciones.visibility = View.GONE
 
-       //boton de opcion por artista
+        //boton de opcion por artista
         binding.botonArtistas.setOnClickListener {
             binding.layoutArtistas.visibility = View.VISIBLE
             binding.layoutValoraciones.visibility = View.GONE

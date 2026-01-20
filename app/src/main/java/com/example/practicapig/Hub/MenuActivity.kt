@@ -71,7 +71,7 @@ class MenuActivity: AppCompatActivity() {
         }
     }
 
-//------------------------------------para el menu del toolbar, es como el profe, hacer tal cual--------------------
+    //------------------------------------para el menu del toolbar, es como el profe, hacer tal cual--------------------
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         return true

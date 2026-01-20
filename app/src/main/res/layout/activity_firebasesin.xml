@@ -115,7 +115,6 @@
         </ScrollView>
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/layoutValoraciones"
         android:layout_width="0dp"
