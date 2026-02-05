@@ -21,7 +21,7 @@ class MediaAdapter(
     private val listaArchivos = mutableListOf<File>()
 
     // conjunto de archivos seleccionados para borrar
-    private val archivosSeleccionados = mutableSetOf<File>()
+    private val archivosSeleccionados = mutableSetOf<File>() //seria igual en videos
 
     inner class MediaViewHolder(private val binding: ItemMediaBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -42,15 +42,15 @@ class MediaAdapter(
 
             // cuando seleccionamos para borrar
             // se comprueba si he seleccionado el archivo
-            val seleccionado = archivosSeleccionados.contains(file)
+            val seleccionado = archivosSeleccionados.contains(file) //seria igual en videos
 
             // opacidad de la imagen
             // si está seleccionado, bajamos la opacidad
-            binding.imagen.alpha = if (seleccionado) 0.5f else 1.0f
+            binding.imagen.alpha = if (seleccionado) 0.5f else 1.0f //seria igual en videos
 
 
             //cuando hago click normal
-            binding.root.setOnClickListener {
+            binding.root.setOnClickListener {  //seria igual en videos
 
                 if (archivosSeleccionados.isNotEmpty()) { //si la lista de seleccionados para borrar esta llena, se añade
                     cambiarSeleccion(file) //si lo vuelvo a tocar se desselecciona
@@ -60,7 +60,7 @@ class MediaAdapter(
             }
 
             // clic largo
-            binding.root.setOnLongClickListener {
+            binding.root.setOnLongClickListener { //seria igual en videos
                 // el clock largo siempre activa o desactiva selección
                 cambiarSeleccion(file)
                 true
@@ -69,7 +69,7 @@ class MediaAdapter(
     }
 
     // añade o quita un archivo del conjunto de seleccionados
-    private fun cambiarSeleccion(file: File) {
+    private fun cambiarSeleccion(file: File) { //seria igual en videos
         //logica de si ya esta seleccionado y vuelvo a pulsar se quita
         if (archivosSeleccionados.contains(file)) {
             archivosSeleccionados.remove(file)
@@ -78,20 +78,20 @@ class MediaAdapter(
         }
 
         // aviso a la Activity si hay al menos un archivo seleccionado
-        alCambiarSeleccion(archivosSeleccionados.isNotEmpty())
+        alCambiarSeleccion(archivosSeleccionados.isNotEmpty()) //igual en videos
 
         // se refresca la lista para cambiar la opacidad
         notifyDataSetChanged()
     }
 
     // borra los archivos seleccionados
-    fun borrarSeleccionados() {
+    fun borrarSeleccionados() { //igual en videos
 
         // elimino cada archivo del sistema de archivos
         archivosSeleccionados.forEach { it.delete() }
 
         // los quito de la lista que se muestra
-        listaArchivos.removeAll(archivosSeleccionados)
+        listaArchivos.removeAll(archivosSeleccionados) //igual pero videos.remove
 
         // limpio la seleccion
         archivosSeleccionados.clear()
